@@ -5,142 +5,157 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SHADOW UPDATE</title>
 
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+
 <style>
-*{
+html,body{
   margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family: 'Orbitron', monospace;
-}
-
-body{
-  background:#000;
-  color:#0ff;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:flex-start;
-}
-
-/* CYBER SCANLINE */
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(0,255,255,0.03),
-    rgba(0,255,255,0.03) 1px,
-    transparent 2px,
-    transparent 4px
-  );
-  pointer-events:none;
-  z-index:999;
-}
-
-/* FOTO */
-.image-box{
-  width:90%;
-  max-width:380px;
-  margin-top:20px;
-  border-radius:18px;
-  overflow:hidden;
-  box-shadow:0 0 30px rgba(0,255,255,0.4);
-  position:relative;
-}
-
-.image-box img{
   width:100%;
-  display:block;
+  height:100%;
+  overflow:hidden;
+  background:black;
+  font-family:"JetBrains Mono", monospace;
 }
 
-/* TEKS DI ATAS FOTO */
-.overlay-text{
+/* BACKGROUND CYBER FLASH */
+@keyframes bgFlash{
+  0%{background:#000}
+  25%{background:#050505}
+  50%{background:#001133}
+  75%{background:#220022}
+  100%{background:#000}
+}
+body{
+  animation:bgFlash .12s infinite;
+}
+
+/* CENTER */
+.center{
   position:absolute;
-  top:15px;
+  top:50%;
   left:50%;
-  transform:translateX(-50%);
+  transform:translate(-50%,-50%);
   text-align:center;
-  color:#00ffff;
-  text-shadow:0 0 10px #00ffff;
+  z-index:10;
 }
 
-.overlay-text h1{
+/* TITLE */
+.title{
   font-size:28px;
-  letter-spacing:4px;
+  letter-spacing:8px;
+  color:#00ffee;
+  margin-bottom:16px;
+  text-shadow:
+    0 0 16px #00ffee,
+    2px 0 red,
+   -2px 0 cyan;
+  animation:titleGlow 3s infinite;
+}
+@keyframes titleGlow{
+  0%,100%{text-shadow:0 0 16px #00ffee,2px 0 red,-2px 0 cyan}
+  50%{text-shadow:0 0 30px lime,-2px 0 magenta,2px 0 cyan}
 }
 
-.overlay-text p{
-  font-size:12px;
-  margin-top:6px;
-  color:#9ff;
+/* PHOTO */
+.photo{
+  width:420px;
+  border-radius:18px;
+  box-shadow:0 0 55px cyan,0 0 150px magenta;
+  animation:photoPulse 3s infinite;
+}
+@keyframes photoPulse{
+  0%,100%{box-shadow:0 0 55px cyan,0 0 150px magenta}
+  50%{box-shadow:0 0 80px #00ffee,0 0 200px #ff00ff}
 }
 
-/* BUTTON WA */
-.btn-wa{
-  margin:25px 0;
-  width:90%;
-  max-width:360px;
-  background:#00ff9c;
-  color:#000;
-  text-align:center;
-  padding:16px;
+/* WA BUTTON */
+.wa{
+  display:inline-block;
+  margin-top:26px;
+  padding:16px 42px;
+  background:#00ff7f;
+  color:black;
+  font-weight:900;
   border-radius:14px;
-  font-weight:bold;
-  letter-spacing:2px;
-  box-shadow:0 0 25px rgba(0,255,160,0.8);
   text-decoration:none;
-  transition:.3s;
+  box-shadow:0 0 35px #00ff7f;
+  animation:waPulse 1.5s infinite;
+}
+@keyframes waPulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.12)}
 }
 
-.btn-wa:hover{
-  transform:scale(1.05);
+/* HACKER TEXT */
+.hacker{
+  position:absolute;
+  font-size:14px;
+  font-weight:700;
+  white-space:nowrap;
+  pointer-events:none;
+  animation:slide 4s linear;
+  text-shadow:0 0 6px currentColor;
 }
-
-/* GLITCH ANIMATION */
-@keyframes glitch{
-  0%{text-shadow:2px 0 red,-2px 0 cyan;}
-  50%{text-shadow:-2px 0 red,2px 0 cyan;}
-  100%{text-shadow:2px 0 red,-2px 0 cyan;}
-}
-
-.glitch{
-  animation:glitch .15s infinite;
+@keyframes slide{
+  from{transform:translateX(-120vw)}
+  to{transform:translateX(120vw);opacity:0}
 }
 </style>
 </head>
 
 <body>
 
-<div class="image-box">
-  <img id="mainImg" src="" alt="shadow">
-  <div class="overlay-text glitch">
-    <h1>UPDATE</h1>
-    <p>Shadow V4.2 — sedang dikembangkan</p>
-  </div>
-</div>
-
-<a class="btn-wa" href="https://wa.me/628xxxxxxxxx">
-  CONTACT WHATSAPP
-</a>
-
-<audio id="bgSound" autoplay loop>
+<!-- AUDIO AUTO PLAY -->
+<audio id="glitchSound" autoplay loop>
   <source src="https://files.catbox.moe/xi2sf8.mp3" type="audio/mpeg">
 </audio>
 
-<script>
-/* LOAD LINK FOTO DARI img.jpg */
-fetch('img.jpg')
-.then(r => r.text())
-.then(url => {
-  document.getElementById('mainImg').src = url.trim();
-});
+<div class="center">
+  <div class="title">SHADOW UPDATE</div>
 
-/* PAKSA AUTOPLAY (HP FRIENDLY) */
-document.addEventListener('click', ()=>{
-  document.getElementById('bgSound').play();
+  <img id="foto" class="photo">
+
+  <br>
+  <a class="wa" href="https://wa.me/6285161570297">CONTACT WHATSAPP</a>
+</div>
+
+<script>
+/* LOAD FOTO DARI img.txt */
+fetch("img.txt")
+  .then(res => res.text())
+  .then(link => {
+    document.getElementById("foto").src = link.trim();
+  });
+
+/* FORCE PLAY AUDIO (UNTUK HP) */
+const audio = document.getElementById("glitchSound");
+audio.volume = 0.85;
+audio.play().catch(()=>{});
+
+document.body.addEventListener("click",()=>{
+  audio.play();
 },{once:true});
+
+/* HACKER TEXT */
+const texts=[
+  "ACCESS GRANTED",
+  "ROOT LOGIN",
+  "SYSTEM ONLINE",
+  "TRACE DISABLED",
+  "PACKET INTERCEPTED",
+  "KERNEL SYNC OK",
+  "ENCRYPTION ACTIVE"
+];
+
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="hacker";
+  h.innerText=texts[Math.floor(Math.random()*texts.length)];
+  h.style.top=Math.random()*innerHeight+"px";
+  h.style.color=["lime","cyan","white"][Math.floor(Math.random()*3)];
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),4000);
+},200);
 </script>
 
 </body>
