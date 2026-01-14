@@ -9,32 +9,100 @@
 
 <style>
 *{box-sizing:border-box}
+
 body{
   margin:0;
   background:#000;
   font-family:"JetBrains Mono", monospace;
-  color:#0ff;
+  color:#00ffee;
+  overflow-x:hidden;
 }
 
 /* HEADER */
 .header{
-  height:90px;
-  background:linear-gradient(135deg,#051b2e,#000);
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  padding-left:16px;
+  padding:18px 16px;
+  background:linear-gradient(180deg,#03131d,#000);
 }
 .header small{
-  opacity:.6;
   font-size:12px;
+  opacity:.6;
 }
-.glitch{
-  font-size:28px;
+.title{
+  font-size:30px;
   letter-spacing:6px;
   text-shadow:2px 0 red,-2px 0 cyan;
   animation:glitch 2.5s infinite;
 }
+@keyframes glitch{
+  0%,100%{transform:none}
+  20%{transform:translateX(-1px)}
+  40%{transform:translateX(1px)}
+}
+
+/* MAIN */
+.main{
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+/* PHOTO */
+.photo{
+  width:100%;
+  max-width:420px;
+  border-radius:18px;
+  box-shadow:0 0 35px rgba(0,255,255,.6);
+  margin-bottom:26px;
+}
+
+/* BUTTON */
+.wa{
+  width:100%;
+  max-width:420px;
+  padding:18px;
+  text-align:center;
+  background:#00ff88;
+  color:#000;
+  font-weight:900;
+  border-radius:16px;
+  text-decoration:none;
+  box-shadow:0 0 30px #00ff88;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <small>KERNEL OK</small>
+  <div class="title">SHADOW UPDATE</div>
+</div>
+
+<div class="main">
+  <img id="foto" class="photo">
+  <a class="wa" href="https://wa.me/6285161570297">CONTACT WHATSAPP</a>
+</div>
+
+<audio id="audio" autoplay loop>
+  <source src="https://files.catbox.moe/xi2sf8.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+fetch("img.txt")
+.then(r=>r.text())
+.then(t=>{
+  document.getElementById("foto").src = t.trim();
+});
+
+const audio=document.getElementById("audio");
+audio.volume=0.8;
+audio.play().catch(()=>{});
+document.body.addEventListener("click",()=>audio.play(),{once:true});
+</script>
+
+</body>
+</html>}
 @keyframes glitch{
   0%,100%{transform:none}
   20%{transform:translateX(-1px)}
