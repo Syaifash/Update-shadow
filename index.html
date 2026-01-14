@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHADOW UPDATE</title>
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+
+<style>
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:"JetBrains Mono", monospace;
+  background:black;
+}
+
+/* BACKGROUND FLASH */
+@keyframes bgFlash{
+  0%{background:#000}
+  25%{background:#050505}
+  50%{background:#001133}
+  75%{background:#220022}
+  100%{background:#000}
+}
+body.flash-on{ animation:bgFlash .12s infinite; }
+body.flash-off{ background:black; }
+
+/* TOGGLE FLASH */
+.toggle{
+  position:absolute;
+  top:16px;
+  left:50%;
+  transform:translateX(-50%);
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  cursor:pointer;
+  z-index:50;
+  box-shadow:0 0 12px currentColor;
+}
+
+/* GRID + SCANLINE */
+.grid{
+  position:fixed;
+  inset:0;
+  background:
+    linear-gradient(rgba(0,255,255,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,255,.08) 1px, transparent 1px);
+  background-size:40px 40px;
+  animation:gridMove 20s linear infinite;
+  pointer-events:none;
+  z-index:1;
+}
+@keyframes gridMove{
+  from{background-position:0 0}
+  to{background-position:400px 400px}
+}
+.scanline{
+  position:fixed;
+  inset:0;
+  background:repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,.04) 0px,
+    rgba(255,255,255,.04) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+  pointer-events:none;
+  z-index:30;
+}
+
+/* CENTER */
+.center{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  text-align:center;
+  z-index:10;
+}
+
+/* TITLE */
+.title{
+  font-size:30px;
+  letter-spacing:8px;
+  color:#00ffee;
+  text-shadow:0 0 14px #00ffee,2px 0 red,-2px 0 cyan;
+  margin-bottom:14px;
+  animation:glitch 3s infinite;
+}
+@keyframes glitch{
+  0%{text-shadow:2px 0 red,-2px 0 cyan}
+  50%{text-shadow:-2px 0 lime,2px 0 magenta}
+  100%{text-shadow:0 0 14px #00ffee}
+}
+
+/* PHOTO */
+.photo{
+  width:400px;
+  border-radius:18px;
+  box-shadow:0 0 45px cyan,0 0 120px magenta;
+  animation:photoPulse 3s infinite;
+}
+@keyframes photoPulse{
+  0%,100%{box-shadow:0 0 45px cyan,0 0 120px magenta}
+  50%{box-shadow:0 0 75px #00ffee,0 0 170px #ff00ff}
+}
+
+/* WA */
+.wa{
+  display:inline-block;
+  margin-top:24px;
+  padding:16px 42px;
+  background:#00ff7f;
+  color:black;
+  font-weight:900;
+  border-radius:14px;
+  text-decoration:none;
+  box-shadow:0 0 35px #00ff7f;
+  animation:waPulse 1.6s infinite;
+}
+@keyframes waPulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.12)}
+}
+
+/* SOUND TOGGLE */
+.sound{
+  margin-top:14px;
+  font-size:14px;
+  color:black;
+  background:#00ffee;
+  padding:8px 22px;
+  border-radius:20px;
+  cursor:pointer;
+  display:inline-block;
+  box-shadow:0 0 18px #00ffee;
+  font-weight:800;
+}
+
+/* HACKER TEXT */
+.hacker{
+  position:absolute;
+  font-size:15px;
+  font-weight:700;
+  white-space:nowrap;
+  pointer-events:none;
+  z-index:5;
+  animation:slide 4s linear;
+  text-shadow:0 0 6px currentColor;
+}
+@keyframes slide{
+  from{transform:translateX(-120vw)}
+  to{transform:translateX(120vw);opacity:0}
+}
+</style>
+</head>
+
+<body class="flash-on">
+
+<!-- AUDIO (DEFAULT ON) -->
+<audio id="glitchSound" loop>
+  <source src="https://files.catbox.moe/xi2sf8.mp3" type="audio/mpeg">
+</audio>
+
+<div class="grid"></div>
+<div class="scanline"></div>
+
+<div class="toggle" id="toggle"></div>
+
+<div class="center">
+  <div class="title" id="title">SHADOW</div>
+  <img src="https://files.catbox.moe/iipmeg.jpg" class="photo">
+  <br>
+  <a class="wa" href="https://wa.me/6285161570297">CONTACT WHATSAPP</a>
+  <br>
+  <div class="sound" id="soundBtn">🔇 SOUND ON</div>
+</div>
+
+<script>
+/* FLASH TOGGLE */
+let flash=true;
+const t=document.getElementById("toggle");
+function updateFlash(){
+  document.body.className = flash ? "flash-on" : "flash-off";
+  t.style.background = flash ? "lime" : "red";
+  t.style.color = t.style.background;
+}
+t.onclick=()=>{flash=!flash;updateFlash();}
+updateFlash();
+
+/* TITLE SWITCH */
+const words=["SHADOW","UPDATE"];
+let wi=0;
+setInterval(()=>{
+  document.getElementById("title").innerText=words[wi%2];
+  wi++;
+},4200);
+
+/* SOUND DEFAULT ON */
+const sound=document.getElementById("glitchSound");
+const btn=document.getElementById("soundBtn");
+let playing=true;
+
+/* coba autoplay */
+sound.volume = 0.8;
+sound.play().catch(()=>{});
+
+/* toggle sound */
+btn.onclick=()=>{
+  if(playing){
+    sound.pause();
+    btn.innerText="🔊 SOUND OFF";
+    playing=false;
+  }else{
+    sound.play();
+    btn.innerText="🔇 SOUND ON";
+    playing=true;
+  }
+};
+
+/* HACKER TEXT */
+const texts=[
+  "ACCESS GRANTED",
+  "ROOT LOGIN",
+  "SYSTEM ONLINE",
+  "TRACE DISABLED",
+  "ENCRYPTED DATA",
+  "KERNEL SYNC OK",
+  "PACKET INTERCEPTED"
+];
+
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="hacker";
+  h.innerText=texts[Math.floor(Math.random()*texts.length)];
+  h.style.top=Math.random()*innerHeight+"px";
+  h.style.color=["lime","cyan","white"][Math.floor(Math.random()*3)];
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),4000);
+},200);
+</script>
+
+</body>
+</html>
