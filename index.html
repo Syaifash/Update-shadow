@@ -17,7 +17,7 @@ html,body{
   font-family:"JetBrains Mono", monospace;
 }
 
-/* BACKGROUND CYBER */
+/* BACKGROUND CYBER FLASH */
 @keyframes bgFlash{
   0%{background:#000}
   25%{background:#050505}
@@ -26,7 +26,7 @@ html,body{
   100%{background:#000}
 }
 body{
-  animation:bgFlash .15s infinite;
+  animation:bgFlash .12s infinite;
 }
 
 /* CENTER */
@@ -35,6 +35,131 @@ body{
   top:50%;
   left:50%;
   transform:translate(-50%,-50%);
+  text-align:center;
+  z-index:10;
+}
+
+/* TITLE */
+.title{
+  font-size:28px;
+  letter-spacing:8px;
+  color:#00ffee;
+  margin-bottom:16px;
+  text-shadow:
+    0 0 16px #00ffee,
+    2px 0 red,
+   -2px 0 cyan;
+  animation:titleGlow 3s infinite;
+}
+@keyframes titleGlow{
+  0%,100%{text-shadow:0 0 16px #00ffee,2px 0 red,-2px 0 cyan}
+  50%{text-shadow:0 0 30px lime,-2px 0 magenta,2px 0 cyan}
+}
+
+/* PHOTO */
+.photo{
+  width:420px;
+  border-radius:18px;
+  box-shadow:0 0 55px cyan,0 0 150px magenta;
+  animation:photoPulse 3s infinite;
+}
+@keyframes photoPulse{
+  0%,100%{box-shadow:0 0 55px cyan,0 0 150px magenta}
+  50%{box-shadow:0 0 80px #00ffee,0 0 200px #ff00ff}
+}
+
+/* WA BUTTON */
+.wa{
+  display:inline-block;
+  margin-top:26px;
+  padding:16px 42px;
+  background:#00ff7f;
+  color:black;
+  font-weight:900;
+  border-radius:14px;
+  text-decoration:none;
+  box-shadow:0 0 35px #00ff7f;
+  animation:waPulse 1.5s infinite;
+}
+@keyframes waPulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.12)}
+}
+
+/* HACKER TEXT */
+.hacker{
+  position:absolute;
+  font-size:14px;
+  font-weight:700;
+  white-space:nowrap;
+  pointer-events:none;
+  animation:slide 4s linear;
+  text-shadow:0 0 6px currentColor;
+}
+@keyframes slide{
+  from{transform:translateX(-120vw)}
+  to{transform:translateX(120vw);opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<!-- AUDIO AUTO PLAY -->
+<audio id="glitchSound" autoplay loop>
+  <source src="https://files.catbox.moe/xi2sf8.mp3" type="audio/mpeg">
+</audio>
+
+<div class="center">
+  <div class="title">SHADOW UPDATE</div>
+
+  <img id="foto" class="photo">
+
+  <br>
+  <a class="wa" href="https://wa.me/6285161570297">CONTACT WHATSAPP</a>
+</div>
+
+<script>
+/* LOAD FOTO DARI img.txt */
+fetch("img.txt")
+  .then(res => res.text())
+  .then(link => {
+    document.getElementById("foto").src = link.trim();
+  });
+
+/* FORCE PLAY AUDIO (UNTUK HP) */
+const audio = document.getElementById("glitchSound");
+audio.volume = 0.85;
+audio.play().catch(()=>{});
+
+document.body.addEventListener("click",()=>{
+  audio.play();
+},{once:true});
+
+/* HACKER TEXT */
+const texts=[
+  "ACCESS GRANTED",
+  "ROOT LOGIN",
+  "SYSTEM ONLINE",
+  "TRACE DISABLED",
+  "PACKET INTERCEPTED",
+  "KERNEL SYNC OK",
+  "ENCRYPTION ACTIVE"
+];
+
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="hacker";
+  h.innerText=texts[Math.floor(Math.random()*texts.length)];
+  h.style.top=Math.random()*innerHeight+"px";
+  h.style.color=["lime","cyan","white"][Math.floor(Math.random()*3)];
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),4000);
+},200);
+</script>
+
+</body>
+</html>  transform:translate(-50%,-50%);
   text-align:center;
 }
 
