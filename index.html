@@ -2,39 +2,170 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>SHADOW UPDATE</title>
 
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
 
 <style>
 *{box-sizing:border-box}
-
 body{
   margin:0;
   background:#000;
-  font-family:"JetBrains Mono", monospace;
   color:#00ffee;
+  font-family:JetBrains Mono,monospace;
   overflow-x:hidden;
 }
 
-/* HEADER */
-.header{
-  padding:18px 16px;
-  background:linear-gradient(180deg,#03131d,#000);
+/* BACKGROUND EFFECT */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,.04) 0,
+      rgba(255,255,255,.04) 1px,
+      transparent 2px,
+      transparent 4px
+    );
+  pointer-events:none;
+  animation:scan 4s linear infinite;
 }
-.header small{
-  font-size:12px;
-  opacity:.6;
+@keyframes scan{from{transform:translateY(0)}to{transform:translateY(4px)}}
+
+/* MAIN */
+.main{
+  padding:20px;
+  text-align:center;
 }
-.title{
-  font-size:30px;
+
+/* FOTO */
+.photo-wrap{
+  position:relative;
+  display:inline-block;
+}
+
+.photo{
+  width:100%;
+  max-width:440px;
+  border-radius:18px;
+  box-shadow:0 0 25px rgba(0,255,255,.5);
+  animation:pulse 3s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 25px rgba(0,255,255,.5)}
+  50%{box-shadow:0 0 45px rgba(0,255,255,.9)}
+}
+
+/* TEKS ATAS FOTO */
+.swap{
+  position:absolute;
+  top:16px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:26px;
   letter-spacing:6px;
+  color:#00ffee;
   text-shadow:2px 0 red,-2px 0 cyan;
-  animation:glitch 2.5s infinite;
+  animation:glitch 1.8s infinite;
+  pointer-events:none;
 }
 @keyframes glitch{
-  0%,100%{transform:none}
+  0%,100%{transform:translateX(-50%)}
+  25%{transform:translateX(calc(-50% - 1px))}
+  50%{transform:translateX(calc(-50% + 1px))}
+}
+
+/* FLOATING HACKER TEXT */
+.float{
+  position:fixed;
+  font-size:12px;
+  opacity:.35;
+  animation:float 6s linear infinite;
+  pointer-events:none;
+}
+@keyframes float{
+  from{transform:translateX(-120px)}
+  to{transform:translateX(120vw)}
+}
+
+/* WA BUTTON */
+.wa{
+  display:block;
+  max-width:440px;
+  margin:28px auto 0;
+  padding:18px;
+  background:#00ff88;
+  color:#000;
+  font-weight:900;
+  border-radius:16px;
+  text-decoration:none;
+  box-shadow:0 0 30px #00ff88;
+  animation:btnpulse 2.5s infinite;
+}
+@keyframes btnpulse{
+  0%,100%{box-shadow:0 0 25px #00ff88}
+  50%{box-shadow:0 0 45px #00ff88}
+}
+</style>
+</head>
+
+<body>
+
+<div class="main">
+
+  <div class="photo-wrap">
+    <div id="swap" class="swap">SHADOW</div>
+    <img id="foto" class="photo">
+  </div>
+
+  <a class="wa" href="https://wa.me/6285161570297">
+    CONTACT WHATSAPP
+  </a>
+
+</div>
+
+<audio id="audio" loop>
+  <source src="https://files.catbox.moe/xi2sf8.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// FOTO
+fetch("img.txt").then(r=>r.text()).then(t=>{
+  document.getElementById("foto").src=t.trim();
+});
+
+// TEKS SHADOW / UPDATE
+const teks=["SHADOW","UPDATE"];
+let i=0;
+setInterval(()=>{
+  document.getElementById("swap").textContent=teks[i++%2];
+},1800);
+
+// FLOATING TEXT
+const words=["ACCESS","SYSTEM","BREACH","SHADOW","UPDATE"];
+for(let i=0;i<10;i++){
+  const d=document.createElement("div");
+  d.className="float";
+  d.textContent=words[Math.floor(Math.random()*words.length)];
+  d.style.top=Math.random()*100+"vh";
+  d.style.left=Math.random()*100+"vw";
+  d.style.animationDuration=4+Math.random()*4+"s";
+  document.body.appendChild(d);
+}
+
+// AUDIO (ANDROID FIX)
+const audio=document.getElementById("audio");
+document.body.addEventListener("click",()=>{
+  audio.volume=0.8;
+  audio.play();
+},{once:true});
+</script>
+
+</body>
+</html>  0%,100%{transform:none}
   20%{transform:translateX(-1px)}
   40%{transform:translateX(1px)}
 }
