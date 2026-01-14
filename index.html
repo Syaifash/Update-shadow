@@ -12,29 +12,92 @@ html,body{
   margin:0;
   width:100%;
   height:100%;
-  overflow:hidden;
-  background:black;
+  background:#000;
   font-family:"JetBrains Mono", monospace;
 }
 
-/* BACKGROUND INTENSE */
-@keyframes bgFlash{
-  0%{background:#000}
-  20%{background:#050505}
-  40%{background:#001a33}
-  60%{background:#220022}
-  80%{background:#330000}
-  100%{background:#000}
-}
-body{
-  animation:bgFlash .1s infinite;
+/* BACKGROUND HALUS */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at center,
+      rgba(0,255,255,.08),
+      transparent 70%);
+  pointer-events:none;
 }
 
 /* TITLE */
 .title{
-  position:absolute;
-  top:18px;
-  left:50%;
+  text-align:center;
+  margin-top:20px;
+  font-size:26px;
+  letter-spacing:8px;
+  color:#00ffee;
+  text-shadow:0 0 12px #00ffee;
+}
+
+/* CENTER */
+.center{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  margin-top:40px;
+}
+
+/* PHOTO */
+.photo{
+  width:420px;
+  border-radius:18px;
+  box-shadow:0 0 40px rgba(0,255,255,.6);
+}
+
+/* WA BUTTON */
+.wa{
+  margin-top:26px;
+  padding:16px 40px;
+  background:#00ff7f;
+  color:#000;
+  font-weight:900;
+  border-radius:14px;
+  text-decoration:none;
+  box-shadow:0 0 25px #00ff7f;
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">SHADOW UPDATE</div>
+
+<div class="center">
+  <img id="foto" class="photo">
+  <a class="wa" href="https://wa.me/6285161570297">CONTACT WHATSAPP</a>
+</div>
+
+<!-- AUDIO -->
+<audio id="glitchSound" autoplay loop>
+  <source src="https://files.catbox.moe/xi2sf8.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* LOAD FOTO */
+fetch("img.txt")
+  .then(r=>r.text())
+  .then(t=>{
+    document.getElementById("foto").src = t.trim();
+  });
+
+/* FORCE AUDIO */
+const a=document.getElementById("glitchSound");
+a.volume=0.8;
+a.play().catch(()=>{});
+document.body.addEventListener("click",()=>a.play(),{once:true});
+</script>
+
+</body>
+</html>  left:50%;
   transform:translateX(-50%);
   font-size:26px;
   letter-spacing:8px;
